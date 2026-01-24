@@ -42,7 +42,7 @@
             <tbody>
                 @foreach ($orders as $order)
                 <tr class="border-b hover:bg-blue-50 transition">
-                    <td class="p-4 font-medium">#{{ $order->id }}</td>
+                    <td class="p-4 font-medium">#{{ $order->order_id }}</td>
 
                     <td class="p-4">
                         <div class="flex items-center gap-3">
@@ -55,7 +55,7 @@
 
                     <td class="p-4">{{ $order->date }}</td>
 
-                    <td class="p-4">${{ number_format($order->price, 2) }}</td>
+                    <td class="p-4">Rp {{ number_format($order->price, 0, ',', '.') }}</td>
 
                     <td class="p-4">
                         @if($order->status === 'Pending')

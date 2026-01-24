@@ -7,6 +7,6 @@
         type="{{ $type }}"
         name="{{ $name }}"
         {{ $required ? 'required' : '' }}
-        class="w-full px-4 py-3 border rounded-xl bg-gray-50 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+        class="w-full px-4 py-3 border rounded-xl bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-400 focus:outline-none"
     >
 </div>

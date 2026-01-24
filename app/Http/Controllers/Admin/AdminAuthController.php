@@ -1,14 +1,14 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AdminAuthController extends Controller
 {
-    public function showLogin()
+    public function showLoginForm()
     {
         return view('admin.login');
     }
@@ -20,22 +20,52 @@ class AdminAuthController extends Controller
             'password' => 'required'
         ]);
 
-        $admin = Admin::where('email', $request->email)->first();
+        $credentials = $request->only('email', 'password');
 
-        // cek apakah admin ditemukan & password cocok
-        if (!$admin || !Hash::check($request->password, $admin->password)) {
-            return back()->withErrors(['email' => 'Email atau password salah!']);
+        // First, try normal bcrypt authentication
+        try {
+            if (Auth::guard('admin')->attempt(array_merge($credentials, ['role' => 'admin']))) {
+                $request->session()->regenerate();
+                return redirect()->route('admin.dashboard')->with('success', 'Login berhasil.');
+            }
+        } catch (\RuntimeException $e) {
+            // fall through to legacy fallback below
         }
 
-        // Simpan session admin
-        session(['admin_id' => $admin->id]);
+        // Fallback for legacy passwords (sha1/md5/plain)
+        $admin = \App\Models\User::where('email', $request->email)->where('role', 'admin')->first();
+        if ($admin) {
+            $plain = $request->password;
+            $stored = $admin->password;
 
-        return redirect()->route('admin.dashboard');
+            $legacyMatch = false;
+            // sha1
+            if (hash('sha1', $plain) === $stored) $legacyMatch = true;
+            // md5
+            if (hash('md5', $plain) === $stored) $legacyMatch = true;
+            // plain
+            if ($plain === $stored) $legacyMatch = true;
+
+            if ($legacyMatch) {
+                // Re-hash to bcrypt and login
+                $admin->password = \Illuminate\Support\Facades\Hash::make($plain);
+                $admin->save();
+
+                Auth::guard('admin')->login($admin);
+                $request->session()->regenerate();
+                return redirect()->route('admin.dashboard')->with('success', 'Login berhasil.');
+            }
+        }
+
+        return back()->withErrors(['email' => 'Email atau password salah!']);
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        session()->forget('admin_id');
+        Auth::guard('admin')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect()->route('admin.login');
     }
 }
