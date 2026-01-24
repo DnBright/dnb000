@@ -51,10 +51,9 @@ class UserOrderController extends Controller
     public function showRevision(Order $order)
     {
         $user = Auth::user();
-        if ($order->user_id !== $user->id) abort(403);
+        if ($order->customer_id !== $user->user_id) abort(403);
 
-        $meta = $order->meta ?? [];
-        $revisions = $meta['revisions'] ?? [];
+        $revisions = $order->revisions()->orderBy('created_at', 'desc')->get();
 
         return view('user.revision', compact('order','revisions'));
     }
@@ -77,15 +76,18 @@ class UserOrderController extends Controller
             $path = $request->file('attachment')->store("orders/{$order->order_id}/revisions", 'public');
         }
 
+        $revisionNo = \App\Models\Revision::where('order_id', $order->order_id)->count() + 1;
+
         \App\Models\Revision::create([
             'order_id' => $order->order_id,
             'admin_id' => $order->admin_id,
-            'revision_notes' => $data['notes'],
+            'revision_no' => $revisionNo,
+            'request_note' => $data['notes'],
             'revision_file' => $path,
-            'revision_date' => now(),
+            'created_at' => now(),
         ]);
 
-        if ($order->status === 'submitted') {
+        if (in_array($order->status, ['submitted', 'in_progress', 'completed'])) {
             $order->status = 'revision';
         }
         $order->save();
@@ -245,7 +247,7 @@ class UserOrderController extends Controller
                 return true;
             }
         } catch (\Exception $e) {
-            \Log::warning('Midtrans sync failed for Order ' . $order->id, ['error' => $e->getMessage()]);
+            \Log::warning('Midtrans sync failed for Order ' . $order->order_id, ['error' => $e->getMessage()]);
         }
         return false;
     }

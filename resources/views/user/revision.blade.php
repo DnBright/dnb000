@@ -99,20 +99,19 @@
                     </form>
                 </div>
 
-                {{-- Previous Revisions List --}}
-                @if(!empty($revisions) && count($revisions) > 0)
+                @if($revisions->count() > 0)
                 <div class="glass-card p-6 border-white/5">
                     <h3 class="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-4">{{ __('Revision Log') }}</h3>
                     <div class="space-y-4 max-h-[300px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white/10">
-                        @foreach(array_reverse($revisions) as $r)
+                        @foreach($revisions as $r)
                         <div class="p-4 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors">
                             <div class="flex justify-between items-start mb-2">
-                                <span class="text-[9px] font-black text-brand-violet uppercase tracking-widest">{{ $r['created_at'] ?? 'UNK' }}</span>
-                                <span class="text-[9px] text-slate-600 font-bold uppercase">{{ __('REQ DATA') }}</span>
+                                <span class="text-[9px] font-black text-brand-violet uppercase tracking-widest">{{ optional($r->created_at)->format('d M H:i') ?? 'UNK' }}</span>
+                                <span class="text-[9px] text-slate-600 font-bold uppercase">{{ __('REQ DATA') }} #{{ $r->revision_no }}</span>
                             </div>
-                            <p class="text-xs text-slate-300 font-bold leading-relaxed mb-2">{{ $r['notes'] ?? '' }}</p>
-                            @if(!empty($r['attachment']))
-                                <a href="{{ asset('storage/' . $r['attachment']) }}" target="_blank" class="inline-flex items-center gap-1 text-[9px] font-black text-brand-cyan hover:underline uppercase tracking-wider">
+                            <p class="text-xs text-slate-300 font-bold leading-relaxed mb-2">{{ $r->request_note }}</p>
+                            @if(!empty($r->revision_file))
+                                <a href="{{ asset('storage/' . $r->revision_file) }}" target="_blank" class="inline-flex items-center gap-1 text-[9px] font-black text-brand-cyan hover:underline uppercase tracking-wider">
                                     <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                                     {{ __('View Attachment') }}
                                 </a>

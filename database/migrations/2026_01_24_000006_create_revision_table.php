@@ -17,8 +17,9 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained('order', 'order_id')->onDelete('cascade'); // FK ke order
             $table->integer('revision_no');                 // Nomor revisi (1, 2, 3, dll)
             $table->text('request_note');                   // Catatan permintaan revisi
-            $table->foreignId('admin_id')->constrained('users', 'user_id')->onDelete('cascade'); // Admin yang handle
-            $table->dateTime('created_at');                 // Waktu request revisi
+            $table->string('revision_file', 255)->nullable(); // File pendukung revisi
+            $table->foreignId('admin_id')->nullable()->constrained('users', 'user_id')->onDelete('cascade'); // Admin yang handle
+            $table->dateTime('created_at')->useCurrent();                 // Waktu request revisi
             $table->dateTime('resolved_at')->nullable();    // Waktu revisi selesai
             
             // Indexes

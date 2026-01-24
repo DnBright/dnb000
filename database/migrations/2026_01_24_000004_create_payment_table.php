@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('method', 50);                   // Metode pembayaran (credit_card, bank_transfer, e_wallet, etc)
             $table->enum('status', ['pending', 'paid', 'failed', 'refunded'])->default('pending'); // Status pembayaran
             $table->string('proof', 255)->nullable();       // Bukti pembayaran (screenshot, reference number)
-            $table->dateTime('timestamp');                  // Waktu transaksi
+            $table->dateTime('timestamp')->useCurrent();                  // Waktu transaksi
             
             // Indexes
             $table->index('order_id');

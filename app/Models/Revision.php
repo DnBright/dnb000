@@ -13,13 +13,16 @@ class Revision extends Model
     protected $fillable = [
         'order_id',
         'admin_id',
-        'revision_notes',
+        'revision_no',
+        'request_note',
         'revision_file',
-        'revision_date',
+        'created_at',
+        'resolved_at',
     ];
 
     protected $casts = [
-        'revision_date' => 'datetime',
+        'created_at' => 'datetime',
+        'resolved_at' => 'datetime',
     ];
 
     // Relasi: Revision terkait dengan satu order

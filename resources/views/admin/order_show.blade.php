@@ -183,11 +183,11 @@
                 @php $revs = $order->meta['revisions'] ?? []; $responses = $order->meta['revision_responses'] ?? []; @endphp
                 
                 <div class="space-y-6 mb-8 max-h-64 overflow-y-auto pr-4 scrollbar-thin scrollbar-thumb-white/10">
-                    @forelse($order->revisions as $idx => $r)
+                    @forelse($order->revisions->sortByDesc('created_at') as $r)
                         <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/5 relative">
                             <div class="absolute -left-2 top-0 bottom-0 w-1 bg-brand-violet rounded-full opacity-40"></div>
-                            <div class="text-[9px] text-slate-600 font-bold uppercase tracking-widest mb-2">{{ optional($r->revision_date)->format('d M H:i') ?? 'Timestamp Unknown' }} • User Directive #{{ $idx+1 }}</div>
-                            <div class="text-xs text-slate-300 leading-relaxed">{{ $r->revision_notes ?? 'Status empty.' }}</div>
+                            <div class="text-[9px] text-slate-600 font-bold uppercase tracking-widest mb-2">{{ optional($r->created_at)->format('d M H:i') ?? 'Timestamp Unknown' }} • User Directive #{{ $r->revision_no }}</div>
+                            <div class="text-xs text-slate-300 leading-relaxed">{{ $r->request_note ?? 'Status empty.' }}</div>
                             @if(!empty($r->revision_file))
                                 <a href="{{ asset('storage/' . $r->revision_file) }}" target="_blank" class="inline-flex items-center gap-2 mt-4 text-[9px] font-black text-brand-cyan hover:underline uppercase tracking-widest">
                                     <span>Download Data</span>

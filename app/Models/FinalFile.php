@@ -13,12 +13,13 @@ class FinalFile extends Model
     protected $fillable = [
         'order_id',
         'file_path',
-        'upload_date',
+        'uploaded_at',
         'file_type',
+        'file_type_category',
     ];
 
-    protected $dates = [
-        'upload_date',
+    protected $casts = [
+        'uploaded_at' => 'datetime',
     ];
 
     // Relasi: File terkait dengan satu order

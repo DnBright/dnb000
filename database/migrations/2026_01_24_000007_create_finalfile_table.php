@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('file_path', 255);               // Path file di storage
             $table->string('file_type', 50);                // Tipe file (pdf, png, jpg, psd, etc)
             $table->enum('file_type_category', ['source', 'final', 'backup'])->default('final'); // Kategori file
-            $table->dateTime('uploaded_at');                // Waktu upload file
+            $table->dateTime('uploaded_at')->useCurrent();                // Waktu upload file
             
             // Indexes
             $table->index('order_id');

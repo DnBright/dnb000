@@ -30,7 +30,7 @@ class DesignDelivered extends Mailable
      */
     public function build()
     {
-        $m = $this->subject("Your design is ready - Order #{$this->order->id}")
+        $m = $this->subject("Your design is ready - Order #{$this->order->order_id}")
                   ->view('emails.design_delivered')
                   ->with([
                       'order' => $this->order,

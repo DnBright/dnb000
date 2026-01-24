@@ -187,8 +187,8 @@ class AdminDashboardController extends Controller
                 $notifications[] = [
                     'type' => 'chat',
                     'title' => 'New Message',
-                    'desc' => 'Order #' . $o->id . ' from ' . ($o->customer_name ?? $o->user->name ?? 'User'),
-                    'link' => route('admin.orders.show', $o->id),
+                    'desc' => 'Order #' . $o->order_id . ' from ' . ($o->customer_name ?? $o->user->name ?? 'User'),
+                    'link' => route('admin.orders.show', $o->order_id),
                     'time' => $o->updated_at->diffForHumans()
                 ];
             }
@@ -204,8 +204,8 @@ class AdminDashboardController extends Controller
             $notifications[] = [
                 'type' => 'order',
                 'title' => 'New Order',
-                'desc' => 'Protocol #' . $o->id . ' Initiated',
-                'link' => route('admin.orders.show', $o->id),
+                'desc' => 'Protocol #' . $o->order_id . ' Initiated',
+                'link' => route('admin.orders.show', $o->order_id),
                 'time' => $o->created_at->diffForHumans()
             ];
         }

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('receiver_id')->constrained('users', 'user_id')->onDelete('cascade'); // Siapa penerima
             $table->text('message');                        // Isi pesan
             $table->string('attachment', 255)->nullable();  // File attachment (design draft, etc)
-            $table->dateTime('timestamp');                  // Waktu pesan
+            $table->dateTime('timestamp')->useCurrent();                  // Waktu pesan
             
             // Indexes
             $table->index('order_id');

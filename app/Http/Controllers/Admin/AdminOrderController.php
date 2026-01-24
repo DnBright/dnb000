@@ -107,12 +107,15 @@ class AdminOrderController extends Controller
 
         $path = $request->file('file')->store("orders/{$order->order_id}/revisions", 'public');
 
+        $revisionNo = \App\Models\Revision::where('order_id', $order->order_id)->count() + 1;
+
         \App\Models\Revision::create([
             'order_id' => $order->order_id,
             'admin_id' => auth()->id(),
-            'revision_notes' => $data['notes'] ?? 'Revision response from admin',
+            'revision_no' => $revisionNo,
+            'request_note' => $data['notes'] ?? 'Revision response from admin',
             'revision_file' => $path,
-            'revision_date' => now(),
+            'created_at' => now(),
         ]);
 
         return redirect()->back()->with('success', 'Revision response uploaded.');
@@ -224,7 +227,7 @@ class AdminOrderController extends Controller
         \App\Models\FinalFile::create([
             'order_id' => $order->order_id,
             'file_path' => $path,
-            'upload_date' => now(),
+            'uploaded_at' => now(),
             'file_type' => $file->getClientOriginalExtension(),
         ]);
 
