@@ -244,7 +244,7 @@
             chatMessages.innerHTML = '';
             chats.forEach(function(m){
                 const isAdmin = m.sender === 'admin';
-                const senderLabel = isAdmin ? 'Command' : 'Correspondent';
+                const senderLabel = isAdmin ? ('ADMIN (' + m.sender_name + ')') : ('CLIENT (' + m.sender_name + ')');
                 const alignClass = isAdmin ? 'flex-row-reverse' : 'flex-row';
                 const bubbleClass = isAdmin ? 'bg-brand-cyan text-black rounded-tr-none shadow-[0_0_20px_rgba(6,246,255,0.15)]' : 'bg-white/5 border border-white/10 text-white rounded-tl-none';
                 const time = m.created_at ? m.created_at : '';
@@ -258,7 +258,7 @@
                         </div>
                         <div class="max-w-[75%]">
                             <div class="flex ${isAdmin ? 'flex-row-reverse text-right' : 'flex-row'} items-center gap-3 mb-1.5 px-1">
-                                <span class="text-[9px] font-black uppercase tracking-widest ${isAdmin ? 'text-brand-cyan' : 'text-slate-500'}">${senderLabel}</span>
+                                <span class="text-[9px] font-black uppercase tracking-widest ${isAdmin ? 'text-brand-cyan' : 'text-slate-400'}">${senderLabel}</span>
                                 <span class="text-[8px] text-slate-700 font-bold uppercase">${time}</span>
                             </div>
                             <div class="${bubbleClass} p-4 rounded-2xl text-xs font-medium leading-relaxed shadow-xl">

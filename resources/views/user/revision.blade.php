@@ -164,7 +164,7 @@
             // Group messages by date could be added here, simplified for now
             chats.forEach(function(m){
                 const isAdmin = m.sender === 'admin';
-                const senderName = isAdmin ? 'SYSTEM' : 'CLIENT';
+                const senderLabel = isAdmin ? ('ADMIN (' + m.sender_name + ')') : ('CLIENT (' + m.sender_name + ')');
                 const time = m.created_at ? new Date(m.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
                 
                 const alignClass = isAdmin ? 'items-start' : 'items-end';
@@ -185,9 +185,9 @@
 
                 const html = `
                     <div class="flex flex-col ${alignClass} animate-fade-in-up">
-                        <div class="flex items-center gap-2 mb-1 opacity-50">
-                            <span class="text-[9px] font-black uppercase tracking-widest">${senderName}</span>
-                            <span class="text-[9px] font-mono">${time}</span>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-[9px] font-black uppercase tracking-widest ${isAdmin ? 'text-brand-violet' : 'text-brand-cyan'}">${senderLabel}</span>
+                            <span class="text-[9px] font-mono text-slate-500">${time}</span>
                         </div>
                         <div class="p-4 max-w-[85%] ${bubbleClass} text-xs font-bold leading-relaxed relative">
                             ${esc(m.message)}

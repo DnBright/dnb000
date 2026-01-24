@@ -108,10 +108,10 @@ class UserOrderController extends Controller
         return response()->json([
             'chats' => $chats->map(function($c) {
                 return [
-                    'sender' => $c->sender->role === 'admin' ? 'admin' : 'user',
-                    'sender_name' => $c->sender->name,
+                    'sender' => $c->sender->role ?? 'user',
+                    'sender_name' => $c->sender->name ?? 'User',
                     'message' => $c->message,
-                    'attachment' => $c->file_attachment,
+                    'attachment' => $c->attachment,
                     'created_at' => $c->timestamp,
                 ];
             })
@@ -141,7 +141,7 @@ class UserOrderController extends Controller
 
         if ($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store("orders/{$order->order_id}/chats", 'public');
-            $msgData['file_attachment'] = $path;
+            $msgData['attachment'] = $path;
         }
 
         $chat = \App\Models\ChatLog::create($msgData);
@@ -195,7 +195,7 @@ class UserOrderController extends Controller
                 if ($r->revision_file) Storage::disk('public')->delete($r->revision_file);
             }
             foreach ($order->chats as $c) {
-                if ($c->file_attachment) Storage::disk('public')->delete($c->file_attachment);
+                if ($c->attachment) Storage::disk('public')->delete($c->attachment);
             }
         } catch (\Exception $e) {}
 

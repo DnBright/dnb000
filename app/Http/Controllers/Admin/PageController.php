@@ -696,6 +696,8 @@ class PageController extends Controller
             'layanan_pakets.*' => 'nullable|string|max:255',
             'layanan_subtitles' => 'nullable|array',
             'layanan_subtitles.*' => 'nullable|string|max:255',
+            'layanan_prices' => 'nullable|array',
+            'layanan_prices.*' => 'nullable|numeric|min:0',
             'layanan_images.*' => 'nullable|image|max:2048',
         ]);
 
@@ -744,6 +746,17 @@ class PageController extends Controller
                 $item['paket'] = $existing[$i]['paket'];
             } elseif (!empty($title)) {
                 $item['paket'] = Str::slug($title);
+            }
+
+            $currentPrice = $data['layanan_prices'][$i] ?? 0;
+            $item['price'] = $currentPrice;
+
+            // SYNC with designpackage table
+            if (!empty($item['paket'])) {
+                $pkg = \App\Models\DesignPackage::where('category', $item['paket'])->first();
+                if ($pkg) {
+                    $pkg->update(['price' => $currentPrice]);
+                }
             }
 
             if (!empty($existing[$i]['image']) && empty($request->file('layanan_images')[$i]) && empty($request->input('remove_layanan_'.$i))) {

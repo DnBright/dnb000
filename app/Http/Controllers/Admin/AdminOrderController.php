@@ -53,11 +53,12 @@ class AdminOrderController extends Controller
 
         return response()->json([
             'chats' => $chats->map(function($c) {
+                $role = $c->sender->role ?? 'user';
                 return [
-                    'sender' => $c->sender->role === 'admin' ? 'admin' : 'user',
-                    'sender_name' => $c->sender->name,
+                    'sender' => $role, // 'admin' or 'customer'
+                    'sender_name' => $c->sender->name ?? 'Unknown',
                     'message' => $c->message,
-                    'attachment' => $c->file_attachment,
+                    'attachment' => $c->attachment,
                     'created_at' => $c->timestamp,
                 ];
             })
@@ -74,7 +75,7 @@ class AdminOrderController extends Controller
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,pdf,zip,rar|max:10240',
         ]);
 
-        $adminId = auth()->id();
+        $adminId = \Illuminate\Support\Facades\Auth::guard('admin')->id();
         $receiverId = $order->customer_id;
 
         $msgData = [
@@ -87,7 +88,7 @@ class AdminOrderController extends Controller
 
         if ($request->hasFile('attachment')) {
             $path = $request->file('attachment')->store("orders/{$order->order_id}/chats", 'public');
-            $msgData['file_attachment'] = $path;
+            $msgData['attachment'] = $path;
         }
 
         $chat = \App\Models\ChatLog::create($msgData);
@@ -111,7 +112,7 @@ class AdminOrderController extends Controller
 
         \App\Models\Revision::create([
             'order_id' => $order->order_id,
-            'admin_id' => auth()->id(),
+            'admin_id' => \Illuminate\Support\Facades\Auth::guard('admin')->id(),
             'revision_no' => $revisionNo,
             'request_note' => $data['notes'] ?? 'Revision response from admin',
             'revision_file' => $path,

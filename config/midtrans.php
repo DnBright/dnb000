@@ -15,21 +15,21 @@ return [
         'premium' => 250000,
 
         // Service-specific prices (IDR)
-        'logo-design' => 4000000,       // Logo per brand
-        'desain-stationery' => 1000000, // Stationery set (business card, letterhead)
-        'website-design' => 8000000,    // Basic website design
-        'kemasan-design' => 2500000,    // Packaging design
-        'feed-design' => 500000,        // Social feed package
-        'design-lainnya' => 750000,     // Custom / consultation
-        'website' => 8000000,
-        'branding' => 3500000,
+        'logo-design' => 5000000,
+        'desain-stationery' => 4500000,
+        'website-design' => 25000000,
+        'kemasan-design' => 2500000,
+        'feed-design' => 500000,
+        'design-lainnya' => 750000,
+        'website' => 25000000,
+        'branding' => 50000000,
         'seo' => 1200000,
-        'social-media' => 600000,
+        'social-media' => 500000,
         'packaging' => 2500000,
-        'stationery' => 1000000,
+        'stationery' => 4500000,
         'illustration' => 1500000,
         'ads' => 500000,
-        'ux-ui' => 7000000,
+        'ux-ui' => 25000000,
     ],
     // Verify SSL when making server-side requests to Midtrans.
     // Set to false in local sandbox if you run into cURL CA issues.

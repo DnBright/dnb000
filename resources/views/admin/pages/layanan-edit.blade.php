@@ -117,6 +117,14 @@
                             <input name="layanan_subtitles[]" value="{{ old('layanan_subtitles.'.$i, $svc['subtitle'] ?? '') }}" class="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-5 text-xs text-slate-400 focus:text-white focus:outline-none focus:border-brand-cyan/50 transition-all font-medium">
                         </div>
 
+                        <div class="group">
+                            <label class="text-[10px] font-black text-brand-cyan border-b border-brand-cyan/20 pb-1 uppercase tracking-[0.3em] mb-3 block ml-1">Price Directive (IDR)</label>
+                            <div class="relative">
+                                <span class="absolute left-5 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-500">RP</span>
+                                <input type="number" name="layanan_prices[]" value="{{ old('layanan_prices.'.$i, (int)($svc['price'] ?? 0)) }}" class="w-full bg-white/5 border border-white/10 rounded-xl py-3 pl-12 pr-5 text-xs text-white focus:outline-none focus:border-brand-cyan/50 transition-all font-bold" placeholder="0">
+                            </div>
+                        </div>
+
                         <div class="space-y-4 pt-2">
                             <label class="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] block ml-1">Node Asset</label>
                             <div class="flex items-center gap-4">

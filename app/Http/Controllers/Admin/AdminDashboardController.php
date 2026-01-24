@@ -169,29 +169,25 @@ class AdminDashboardController extends Controller
         $notifications = [];
         $chatCount = 0;
 
-        // Check for unread chats
-        $orders = Order::whereNotNull('meta')->get();
-        foreach ($orders as $o) {
-            $meta = $o->meta ?? [];
-            $chats = $meta['chats'] ?? [];
-            $hasUnread = false;
-            foreach ($chats as $m) {
-                if (($m['sender'] ?? '') === 'user' && empty($m['read_by_admin'])) {
-                    $hasUnread = true;
-                    break;
-                }
-            }
+        // Check for recent messages (from user in the last 24h)
+        $recentUserChats = \App\Models\ChatLog::whereHas('sender', function($q) {
+                $q->where('role', 'customer');
+            })
+            ->where('timestamp', '>=', now()->subDay())
+            ->with(['order.customer'])
+            ->latest('timestamp')
+            ->get()
+            ->unique('order_id');
 
-            if ($hasUnread) {
-                $chatCount++;
-                $notifications[] = [
-                    'type' => 'chat',
-                    'title' => 'New Message',
-                    'desc' => 'Order #' . $o->order_id . ' from ' . ($o->customer_name ?? $o->user->name ?? 'User'),
-                    'link' => route('admin.orders.show', $o->order_id),
-                    'time' => $o->updated_at->diffForHumans()
-                ];
-            }
+        foreach ($recentUserChats as $c) {
+            if (!$c->order) continue;
+            $notifications[] = [
+                'type' => 'chat',
+                'title' => 'New Message',
+                'desc' => 'Order #' . $c->order->order_id . ' from ' . ($c->order->customer->name ?? 'User'),
+                'link' => route('admin.orders.show', $c->order->order_id),
+                'time' => $c->timestamp->diffForHumans()
+            ];
         }
 
         // Check for new orders (Submitted, last 24h)

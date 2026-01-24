@@ -15,7 +15,7 @@ class ChatLog extends Model
         'sender_id',
         'receiver_id',
         'message',
-        'file_attachment',
+        'attachment',
         'timestamp',
     ];
 

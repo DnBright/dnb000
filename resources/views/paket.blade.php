@@ -89,21 +89,13 @@
                 @foreach(($services ?? $defaults) as $svc)
                     @php
                         $paket = !empty($svc['paket']) ? $svc['paket'] : \Illuminate\Support\Str::slug($svc['title'] ?? 'standard');
-                        $prices = config('midtrans.paket_prices', []);
-                        $price = null;
-                        if (!empty($svc['paket']) && isset($prices[$svc['paket']])) $price = $prices[$svc['paket']];
+                        // Primary: use price from Page content (Admin set)
+                        $price = !empty($svc['price']) ? $svc['price'] : null;
+                        
+                        // Secondary: fetch from database if missing in Page content
                         if (is_null($price)) {
-                            $slug = \Illuminate\Support\Str::slug($svc['title'] ?? $paket);
-                            if (isset($prices[$slug])) $price = $prices[$slug];
-                        }
-                        if (is_null($price) && isset($prices[$paket])) $price = $prices[$paket];
-                        if (is_null($price)) {
-                            $title = strtolower($svc['title'] ?? '');
-                            if (str_contains($title, 'kemasan') || str_contains($paket, 'kemasan')) $price = 2500000;
-                            elseif (str_contains($title, 'feed') || str_contains($paket, 'feed')) $price = 500000;
-                            elseif (str_contains($title, 'website') || str_contains($paket, 'website')) $price = 8000000;
-                            elseif (str_contains($title, 'logo')) $price = 4000000;
-                            else $price = 750000;
+                            $pkg = \App\Models\DesignPackage::where('category', $paket)->first();
+                            if ($pkg) $price = $pkg->price;
                         }
                     @endphp
 
