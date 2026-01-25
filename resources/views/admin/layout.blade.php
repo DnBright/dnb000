@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{{ $title ?? 'Control Center • Dark & Bright' }}</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  @vite(['resources/css/app.css','resources/js/app.js'])
+  @vite(['resources/css/app.css','resources/js/app.jsx'])
   @stack('styles')
 </head>
 <body class="bg-[#0b0f14] text-slate-100 antialiased font-['Outfit'] selection:bg-brand-cyan/30">
