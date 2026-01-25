@@ -132,7 +132,7 @@ class PageController extends Controller
             if ($request->hasFile("service_images.$i")) {
                 $file = $request->file("service_images")[$i];
                 $path = $file->store('pages', 'public');
-                $item['image'] = Storage::url($path);
+                $item['image'] = '/storage/' . $path;
                 
                 // Remove old image
                 if (!empty($existingServices[$i]['image'])) {
@@ -218,7 +218,7 @@ class PageController extends Controller
             if ($request->hasFile("designer_images.$i")) {
                 $file = $request->file("designer_images")[$i];
                 $path = $file->store('pages', 'public');
-                $item['image'] = Storage::url($path);
+                $item['image'] = '/storage/' . $path;
                 
                 if (!empty($existingDesigners[$i]['image'])) {
                     $this->deletePhysicalFile($existingDesigners[$i]['image']);
@@ -286,7 +286,7 @@ class PageController extends Controller
             if ($request->hasFile("template_images.$i")) {
                 $file = $request->file("template_images")[$i];
                 $path = $file->store('pages', 'public');
-                $item['image'] = Storage::url($path);
+                $item['image'] = '/storage/' . $path;
                 
                 if (!empty($existingTemplates[$i]['image'])) {
                     $this->deletePhysicalFile($existingTemplates[$i]['image']);
@@ -354,7 +354,7 @@ class PageController extends Controller
             if ($request->hasFile("review_images.$i")) {
                 $file = $request->file("review_images")[$i];
                 $path = $file->store('pages', 'public');
-                $item['image'] = Storage::url($path);
+                $item['image'] = '/storage/' . $path;
                 
                 if (!empty($existingReviews[$i]['image'])) {
                     $this->deletePhysicalFile($existingReviews[$i]['image']);
@@ -427,7 +427,8 @@ class PageController extends Controller
             if ($request->hasFile('logo_images') && isset($request->file('logo_images')[$i])) {
                 $file = $request->file('logo_images')[$i];
                 $path = $file->store('pages', 'public');
-                $item['image'] = Storage::url($path);
+                // FIX: Force relative path
+                $item['image'] = '/storage/' . $path;
                 if (!empty($existing[$i]['image'])) {
                     $prev = parse_url($existing[$i]['image'], PHP_URL_PATH);
                     $prev = preg_replace('#^/?storage/#','',$prev);
@@ -563,7 +564,8 @@ class PageController extends Controller
             if ($request->hasFile($category.'_images') && isset($request->file($category.'_images')[$i])) {
                 $file = $request->file($category.'_images')[$i];
                 $path = $file->store('pages', 'public');
-                $item['image'] = Storage::url($path);
+                // FIX: Force relative path
+                $item['image'] = '/storage/' . $path;
                 if (!empty($existing[$i]['image'])) {
                     $prev = parse_url($existing[$i]['image'], PHP_URL_PATH);
                     $prev = preg_replace('#^/?storage/#','',$prev);
@@ -622,7 +624,7 @@ class PageController extends Controller
             $file = $request->file('hero_image');
             $path = $file->store('pages', 'public');
             $this->deletePhysicalFile($existingContent['hero_image'] ?? null);
-            $updateData['hero_image'] = Storage::url($path);
+            $updateData['hero_image'] = '/storage/' . $path;
         } elseif ($request->boolean('remove_hero_image')) {
             $this->deletePhysicalFile($existingContent['hero_image'] ?? null);
             $updateData['hero_image'] = null;
@@ -642,7 +644,7 @@ class PageController extends Controller
                 if ($request->hasFile("featured_images.$i")) {
                     $file = $request->file("featured_images")[$i];
                     $path = $file->store('pages', 'public');
-                    $item['image'] = Storage::url($path);
+                    $item['image'] = '/storage/' . $path;
                     if (!empty($existingFeatured[$i]['image'])) {
                         $this->deletePhysicalFile($existingFeatured[$i]['image']);
                     }
@@ -716,7 +718,7 @@ class PageController extends Controller
                     Storage::disk('public')->delete($prev);
                 }
             }
-            $data['hero_image'] = Storage::url($path);
+            $data['hero_image'] = '/storage/' . $path;
         }
 
         if ($request->boolean('remove_hero_image')) {
