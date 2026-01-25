@@ -52,7 +52,7 @@ class BriefController extends Controller
             'customer_id' => auth()->id(),
             'package_id' => $packageId,
             'status' => 'submitted',
-            'due_date' => now()->addDays($package->delivery_days ?? 7),
+            'due_date' => now()->addDays((int)($package->delivery_days ?? 7)),
         ]);
 
         session(['order_id' => $order->order_id]);
