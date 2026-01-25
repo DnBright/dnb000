@@ -1,4 +1,4 @@
-name: Deploy Website to cPanel (FTP)
+name: Deploy Website to cPanel (SSH)
 
 on:
   push:
@@ -33,19 +33,27 @@ jobs:
         npm install
         npm run build
 
-    - name: Deploy via FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+    - name: Deploy via SSH
+      uses: easingthemes/ssh-deploy@main
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        ARGS: "-rlgoDzvc -i --delete"
+        SOURCE: "/"
+        REMOTE_HOST: ${{ secrets.SSH_HOST }}
+        REMOTE_USER: ${{ secrets.SSH_USER }}
+        REMOTE_PORT: ${{ secrets.SSH_PORT }}
+        TARGET: ${{ secrets.REMOTE_TARGET }}
+        EXCLUDE: "/node_modules/, /tests/, /storage/logs/, .git/, .github/"
+
+    - name: post-deployment commands
+      uses: appleboy/ssh-action@master
       with:
-        server: ${{ secrets.FTP_SERVER }}
-        username: ${{ secrets.FTP_USERNAME }}
-        password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./
-        server-dir: ./  # This depends on the FTP account root directory
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          **/tests/**
-          **/storage/logs/**
-          .env
-          .github/**
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd ${{ secrets.REMOTE_TARGET }}
+          php artisan migrate --force
+          php artisan optimize
+          php artisan view:clear
