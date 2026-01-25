@@ -67,5 +67,6 @@ jobs:
           # These commands will succeed once PHP version is set to 8.2 in cPanel
           php artisan migrate --force
           php artisan optimize
-          php artisan storage:link
+          # Manually fix symlink via PHP script
+          php public/fix_symlink.php
           php artisan view:clear
