@@ -38,7 +38,6 @@ class PageController extends Controller
             'hero_title' => 'required|string|max:255',
             'hero_subtitle' => 'nullable|string|max:1024',
             'cta1_label' => 'nullable|string|max:64',
-            // Allow non-URL placeholders like '#' or relative links
             'cta1_link' => 'nullable|string|max:255',
             'cta2_label' => 'nullable|string|max:64',
             'cta2_link' => 'nullable|string|max:255',
@@ -57,7 +56,8 @@ class PageController extends Controller
             $path = $file->store('pages', 'public');
             // remove previous image if present
             $this->deletePhysicalFile($content['hero_image'] ?? null);
-            $data['hero_image'] = Storage::url($path);
+            // FIX: Force relative path for shared hosting compatibility
+            $data['hero_image'] = '/storage/' . $path;
         } else {
             // Preserve existing image if no new one and not removing
             if (!$request->boolean('remove_hero_image') && !empty($content['hero_image'])) {
