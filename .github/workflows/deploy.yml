@@ -61,6 +61,9 @@ jobs:
           unzip -o deploy.zip
           rm deploy.zip
           
+          # Remove hosting default files to allow Laravel to load
+          rm -f index.php index.html default.html cgi-bin
+          
           # These commands will succeed once PHP version is set to 8.2 in cPanel
           php artisan migrate --force
           php artisan optimize
