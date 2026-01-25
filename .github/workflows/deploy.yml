@@ -35,8 +35,8 @@ jobs:
 
     - name: Create Deployment Archive
       run: |
-        # Zip all files except unwanted directories and the zip file itself
-        zip -r deploy.zip . -x "node_modules/*" "vendor/*" ".git/*" ".github/*" "tests/*" "storage/logs/*" ".env" "deploy.zip"
+        # Zip all files, including vendor (since we can't run composer on server easily)
+        zip -r deploy.zip . -x "node_modules/*" ".git/*" ".github/*" "tests/*" "storage/logs/*" ".env" "deploy.zip"
 
     - name: Deploy Archive via SCP
       uses: appleboy/scp-action@master
