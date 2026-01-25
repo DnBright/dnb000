@@ -67,4 +67,5 @@ jobs:
           # These commands will succeed once PHP version is set to 8.2 in cPanel
           php artisan migrate --force
           php artisan optimize
+          php artisan storage:link
           php artisan view:clear
