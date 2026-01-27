@@ -101,7 +101,7 @@ class UserOrderController extends Controller
     public function chatFetch(Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ((int)$order->customer_id !== (int)$user->user_id) abort(403);
 
         $chats = $order->chats()->with('sender')->orderBy('timestamp', 'asc')->get();
 
@@ -124,7 +124,7 @@ class UserOrderController extends Controller
     public function chatSend(Request $request, Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ((int)$order->customer_id !== (int)$user->user_id) abort(403);
         
         $data = $request->validate([
             'message' => 'required_without:attachment|string|max:2000',
