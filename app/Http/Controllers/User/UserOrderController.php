@@ -51,7 +51,7 @@ class UserOrderController extends Controller
     public function showRevision(Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ((int)$order->customer_id !== (int)$user->user_id) abort(403);
 
         $revisions = $order->revisions()->orderBy('created_at', 'desc')->get();
 
@@ -64,7 +64,7 @@ class UserOrderController extends Controller
     public function submitRevision(Request $request, Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ((int)$order->customer_id !== (int)$user->user_id) abort(403);
 
         $data = $request->validate([
             'notes' => 'required|string|max:2000',
