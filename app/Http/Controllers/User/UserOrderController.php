@@ -13,7 +13,7 @@ class UserOrderController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $orders = Order::where('customer_id', $user->user_id)->with(['package', 'payments'])->latest()->get();
+        $orders = Order::where('customer_id', $user->id)->with(['package', 'payments'])->latest()->get();
 
         return view('user.orders', compact('orders'));
     }
@@ -24,7 +24,7 @@ class UserOrderController extends Controller
     public function updates(Request $request)
     {
         $user = Auth::user();
-        $orders = Order::where('customer_id', $user->user_id)
+        $orders = Order::where('customer_id', $user->id)
             ->with(['package', 'payments', 'finalFiles'])
             ->orderBy('order_id', 'desc')
             ->get();
@@ -51,7 +51,7 @@ class UserOrderController extends Controller
     public function showRevision(Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ($order->customer_id !== $user->id) abort(403);
 
         $revisions = $order->revisions()->orderBy('created_at', 'desc')->get();
 
@@ -64,7 +64,7 @@ class UserOrderController extends Controller
     public function submitRevision(Request $request, Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ($order->customer_id !== $user->id) abort(403);
 
         $data = $request->validate([
             'notes' => 'required|string|max:2000',
@@ -101,7 +101,7 @@ class UserOrderController extends Controller
     public function chatFetch(Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ($order->customer_id !== $user->id) abort(403);
 
         $chats = $order->chats()->with('sender')->orderBy('timestamp', 'asc')->get();
 
@@ -124,7 +124,7 @@ class UserOrderController extends Controller
     public function chatSend(Request $request, Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ($order->customer_id !== $user->id) abort(403);
         
         $data = $request->validate([
             'message' => 'required_without:attachment|string|max:2000',
@@ -133,7 +133,7 @@ class UserOrderController extends Controller
 
         $msgData = [
             'order_id' => $order->order_id,
-            'sender_id' => $user->user_id,
+            'sender_id' => $user->id,
             'receiver_id' => $order->admin_id ?? 1, // Fallback to main admin
             'message' => $data['message'] ?? '',
             'timestamp' => now(),
@@ -160,7 +160,7 @@ class UserOrderController extends Controller
         $user = Auth::user();
         $order = Order::findOrFail($id);
         
-        if ($order->customer_id != $user->user_id) abort(403);
+        if ($order->customer_id != $user->id) abort(403);
 
         if ($order->status === 'completed' || $order->payments()->where('status', 'paid')->exists()) {
             return redirect()->back()->with('error', 'Tidak dapat membatalkan order yang sudah selesai atau terbayar.');
@@ -180,7 +180,7 @@ class UserOrderController extends Controller
         $user = Auth::user();
         $order = Order::findOrFail($id);
         
-        if ($order->customer_id != $user->user_id) abort(403);
+        if ($order->customer_id != $user->id) abort(403);
 
         if ($order->status === 'completed') {
             return redirect()->back()->with('error', 'Tidak dapat menghapus order yang sudah selesai.');
@@ -261,7 +261,7 @@ class UserOrderController extends Controller
     public function printInvoice(Order $order)
     {
         $user = Auth::user();
-        if ($order->customer_id !== $user->user_id) abort(403);
+        if ($order->customer_id !== $user->id) abort(403);
 
         $amount = (int) ($order->package->price ?? 0);
         $terbilang = $this->terbilang($amount) . ' Rupiah';
