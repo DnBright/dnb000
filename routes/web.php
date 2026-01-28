@@ -198,6 +198,9 @@ Route::middleware('auth')->group(function(){
 // Final Verification & Fixes
 Route::get('/fix-storage', function() {
     try {
+        echo "APP_URL: " . config('app.url') . "<br>";
+        echo "REQUEST_URL: " . request()->root() . "<br>";
+        
         $target = storage_path('app/public');
         $shortcut = public_path('storage');
         
@@ -205,7 +208,8 @@ Route::get('/fix-storage', function() {
             if (is_link($shortcut)) {
                 unlink($shortcut);
             } else {
-                return "ERROR: public/storage exists and is NOT a symlink. Please delete it manually via File Manager first.";
+                echo "WARNING: public/storage exists and is NOT a symlink. Attempting to rename...<br>";
+                rename($shortcut, $shortcut . '_old_' . time());
             }
         }
         
