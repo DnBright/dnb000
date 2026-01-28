@@ -198,10 +198,24 @@ Route::middleware('auth')->group(function(){
 // Final Verification & Fixes
 Route::get('/fix-storage', function() {
     try {
-        Artisan::call('storage:link');
-        Artisan::call('config:clear');
-        Artisan::call('cache:clear');
-        return "SUCCESS: Storage Link and Cache Cleared!";
+        $target = storage_path('app/public');
+        $shortcut = public_path('storage');
+        
+        if (file_exists($shortcut)) {
+            if (is_link($shortcut)) {
+                unlink($shortcut);
+            } else {
+                return "ERROR: public/storage exists and is NOT a symlink. Please delete it manually via File Manager first.";
+            }
+        }
+        
+        if (symlink($target, $shortcut)) {
+            Artisan::call('config:clear');
+            Artisan::call('cache:clear');
+            return "SUCCESS: Storage Link Created and Cache Cleared!";
+        } else {
+            return "ERROR: symlink() function failed. Please contact your host or use cPanel Terminal.";
+        }
     } catch (\Exception $e) {
         return "ERROR: " . $e->getMessage();
     }
