@@ -195,4 +195,16 @@ Route::middleware('auth')->group(function(){
 
 
 
+// Final Verification & Fixes
+Route::get('/fix-storage', function() {
+    try {
+        Artisan::call('storage:link');
+        Artisan::call('config:clear');
+        Artisan::call('cache:clear');
+        return "SUCCESS: Storage Link and Cache Cleared!";
+    } catch (\Exception $e) {
+        return "ERROR: " . $e->getMessage();
+    }
+});
+
 // NOTE: admin routes are declared above using the 'admin' middleware and prefix.
