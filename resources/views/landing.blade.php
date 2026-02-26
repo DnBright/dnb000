@@ -31,12 +31,11 @@
                     </div>
                     
                     <h1 class="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-8 text-white">
-                        {{ $c['hero_title'] ?? __('The Future of Digital') }}
-                        <span class="block animate-text-shimmer">{{ __('Aesthetics') }}.</span>
+                        {{ $c['hero_title'] ?? __('Digital Marketing & Creative Agency') }}
                     </h1>
                     
-                    <p class="text-xl text-slate-400 leading-relaxed mb-10 max-w-xl">
-                        {{ $c['hero_subtitle'] ?? __('We craft premium digital experiences using deep dark canvases and selective bright accents for high-impact visual storytelling.') }}
+                    <p class="text-xl text-slate-400 leading-relaxed mb-10 max-w-2xl">
+                        {{ $c['hero_subtitle'] ?? __('Digital Marketing | Graphic Design | Logo Branding | Social Media Management | Web Development') }}
                     </p>
                     
                     <div class="flex flex-col sm:flex-row gap-5">
