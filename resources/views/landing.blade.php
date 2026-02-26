@@ -94,6 +94,41 @@
         </div>
     </section>
 
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-24 relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <p class="text-brand-cyan font-bold uppercase tracking-widest text-sm mb-3">{{ __('Partnership') }}</p>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-8">{{ __('Dark and Bright Creative Agency') }}</h2>
+                    <div class="space-y-6 text-slate-400 text-lg leading-relaxed">
+                        <p>
+                            {{ __('Dark and Bright is a company engaged in digital marketing and creative agency. We are present as a trusted partner in providing comprehensive solutions to meet branding and digital marketing needs for business actors.') }}
+                        </p>
+                        <p>
+                            {{ __('Formed from professional talents who are experts and experienced in their respective fields. Until now and beyond, we will continue to innovate to provide the best and most trusted quality service guarantee for every client.') }}
+                        </p>
+                    </div>
+                </div>
+                <div class="reveal" style="transition-delay: 200ms;">
+                    <div class="glass-card p-8 border-brand-cyan/20 bg-brand-cyan/5">
+                        <h3 class="text-2xl font-bold text-white mb-6">{{ __('Our Commitment') }}</h3>
+                        <p class="text-slate-300 leading-relaxed mb-8">
+                            {{ __('With tough human resources, high commitment and dedication to work, and always maintaining integrity, we are ready to be a partner in the journey of developing your business. The entire Dark and Bright team has a strong commitment to the company and always tries to give the best results in every job.') }}
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-brand-cyan/20 flex items-center justify-center text-brand-cyan font-bold">DB</div>
+                            <div>
+                                <h4 class="text-white font-bold">Dark and Bright Team</h4>
+                                <p class="text-slate-500 text-xs uppercase tracking-wider">{{ __('Excellence & Integrity') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- SERVICES SECTION -->
     <section id="services" class="py-24 relative">
         <div class="container mx-auto px-6">
@@ -105,9 +140,12 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 @php
                     $services = $c['services'] ?? [
-                        ['title'=>'Creative Identity','subtitle'=>'Bold logos and cohesive brand systems.','image'=>'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80'],
-                        ['title'=>'Digital Product','subtitle'=>'High-fidelity UI components and UX patterns.','image'=>'https://images.unsplash.com/photo-1581291518655-9503cc262f99?auto=format&fit=crop&w=800&q=80'],
-                        ['title'=>'Visual Story','subtitle'=>'Art direction and multi-platform visuals.','image'=>'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=800&q=80'],
+                        ['title'=>'Brand Identity','subtitle'=>'Bold logos and cohesive brand systems for high-impact presence.','image'=>'https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80'],
+                        ['title'=>'Company Profile','subtitle'=>'Professional corporate storytelling and design for your brand.','image'=>'https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=800&q=80'],
+                        ['title'=>'Web Design & SEO','subtitle'=>'High-performance, optimized websites that rank and convert.','image'=>'https://images.unsplash.com/photo-1581291518655-9503cc262f99?auto=format&fit=crop&w=800&q=80'],
+                        ['title'=>'Digital Advertising','subtitle'=>'Strategic ad campaigns across Google, Meta, and more.','image'=>'https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80'],
+                        ['title'=>'Social Media','subtitle'=>'End-to-end social media management and content strategy.','image'=>'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=800&q=80'],
+                        ['title'=>'Training & Education','subtitle'=>'Empowering human resources with creative digital skills.','image'=>'https://images.unsplash.com/photo-1524178232363-1fb28f74b573?auto=format&fit=crop&w=800&q=80'],
                     ];
                 @endphp
 
